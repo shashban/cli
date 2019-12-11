@@ -9,6 +9,7 @@ const START_SCRIPT_EXECUTION_MARKER: string = `Starting script execution via doc
 const BASH_ARG: string = `bash --noprofile --norc -e `;
 const CONTAINER_WORKSPACE: string = '/github/workspace';
 const CONTAINER_TEMP_DIRECTORY: string = '/_temp';
+const AZURE_HTTP_USER_AGENT: string = 'python/3.6.4 msrest_azure/0.5.0 azure-mgmt-web/0.40.0 Azure-SDK-For-Python AZURECLI/2.0.47 GITHUBACTIONS_MyAzure CLI_bcstestit/cli';
 core.exportVariable('AZURE_HTTP_USER_AGENT', 'python/3.6.4 msrest_azure/0.5.0 azure-mgmt-web/0.40.0 Azure-SDK-For-Python AZURECLI/2.0.47 GITHUBACTIONS_MyAzure CLI_bcstestit/cli');
 const run = async () => {
     var scriptFileName: string = '';
@@ -45,6 +46,7 @@ const run = async () => {
         let command: string = `run --workdir ${CONTAINER_WORKSPACE} -v ${process.env.GITHUB_WORKSPACE}:${CONTAINER_WORKSPACE} `;
         command += ` -v ${process.env.HOME}/.azure:/root/.azure -v ${TEMP_DIRECTORY}:${CONTAINER_TEMP_DIRECTORY} `;
         command += `-e GITHUB_WORKSPACE=${CONTAINER_WORKSPACE} -e GITHUB_SHA=${process.env.GITHUB_SHA} `;
+        command += `-e AZURE_HTTP_USER_AGENT=${AZURE_HTTP_USER_AGENT} `;
         command += `--name ${CONTAINER_NAME} `;
         command += ` mcr.microsoft.com/azure-cli:${azcliversion} ${startCommand}`;
         console.log(`${START_SCRIPT_EXECUTION_MARKER}${azcliversion}`);
